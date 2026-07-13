@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart QR Record System</title>
+
+<link rel="stylesheet" href="001 pro .css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+</head>
+
+<body>
+
+<div class="background">
+
+<div class="circle circle1"></div>
+
+<div class="circle circle2"></div>
+
+<div class="circle circle3"></div>
+
+</div>
+
+
+
+<nav>
+
+<div class="logo">
+
+🆔 Smart QR Record
+
+</div>
+
+<div class="nav-right">
+
+<span id="currentDate"></span>
+
+</div>
+
+</nav>
+
+
+
+<div class="container">
+
+
+
+<div class="glass-card">
+
+<h1>Create QR Record</h1>
+
+<p class="subtitle">
+
+Generate Secure QR Record
+
+</p>
+
+
+
+<form id="recordForm">
+
+
+
+<div class="image-section">
+
+<label class="image-box">
+
+<input
+
+type="file"
+
+id="photo"
+
+accept="image/*"
+
+hidden>
+
+<div id="previewArea">
+
+<div class="uploadIcon">
+
+📷
+
+</div>
+
+<p>
+
+Upload Photo
+
+</p>
+
+</div>
+
+</label>
+
+</div>
+
+
+
+<div class="form-grid">
+
+
+
+<div class="input-box">
+
+<label>
+
+Full Name
+
+</label>
+
+<input
+
+type="text"
+
+id="fullName"
+
+placeholder="Enter Full Name"
+
+required>
+
+</div>
+
+
+
+<div class="input-box">
+
+<label>
+
+Gender
+
+</label>
+
+<select id="gender">
+
+<option value="">
+
+Select Gender
+
+</option>
+
+<option>
+
+Male
+
+</option>
+
+<option>
+
+Female
+
+</option>
+
+<option>
+
+Other
+
+</option>
+
+</select>
+
+</div>
+
+
+
+<div class="input-box">
+
+<label>
+
+Date Of Birth
+
+</label>
+
+<input
+
+type="date"
+
+id="dob">
+
+</div>
+
+
+
+<div class="input-box">
+
+<label>
+
+Blood Group
+
+</label>
+
+<select id="bloodGroup">
+
+<option value="">
+
+Select
+
+</option>
+
+<option>A+</option>
+
+<option>A-</option>
+
+<option>B+</option>
+
+<option>B-</option>
+
+<option>AB+</option>
+
+<option>AB-</option>
+
+<option>O+</option>
+
+<option>O-</option>
+
+</select>
+
+</div>
+<div class="input-box">
+
+<label>
+
+Height
+
+</label>
+
+<input
+
+type="text"
+
+id="height"
+
+placeholder="Example : 170 cm">
+
+</div>
+
+
+
+<div class="input-box">
+
+<label>
+
+Weight
+
+</label>
+
+<input
+
+type="text"
+
+id="weight"
+
+placeholder="Example : 65 Kg">
+
+</div>
+
+
+
+<div class="input-box">
+
+<label>
+
+Phone Number
+
+</label>
+
+<input
+
+type="tel"
+
+id="phone"
+
+placeholder="Enter Phone Number">
+
+</div>
+
+
+
+<div class="input-box full-width">
+
+<label>
+
+Address
+
+</label>
+
+<textarea
+
+id="address"
+
+rows="3"
+
+placeholder="Enter Complete Address">
+
+</textarea>
+
+</div>
+
+</div>
+
+
+
+<div class="unique-card">
+
+<h2>
+
+Generated Unique ID
+
+</h2>
+
+<div id="uniqueId">
+
+Waiting...
+
+</div>
+
+</div>
+
+
+
+<div class="qr-card">
+
+<h2>
+
+QR Preview
+
+</h2>
+
+<div id="qrcode">
+
+</div>
+
+</div>
+
+
+
+<div class="button-group">
+
+<button
+
+type="button"
+
+id="generateBtn">
+
+Generate QR
+
+</button>
+
+
+
+<button
+
+type="button"
+
+id="saveBtn">
+
+Save Record
+
+</button>
+
+
+
+<button
+
+type="button"
+
+id="downloadBtn">
+
+Download QR
+
+</button>
+
+<button
+type="button"
+id="newRecordBtn">
+
+➕ New Record
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<div id="loadingPopup" class="popup">
+
+<div class="popup-box">
+
+<div class="loader"></div>
+
+<p>
+
+Uploading Record...
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div id="successPopup" class="popup">
+
+<div class="popup-box">
+
+<h2>
+
+✅ Success
+
+</h2>
+
+<p>
+
+Record Saved Successfully
+
+</p>
+
+<button id="closeSuccess">
+
+OK
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<div id="errorPopup" class="popup">
+
+<div class="popup-box">
+
+<h2>
+
+❌ Error
+
+</h2>
+
+<p id="errorMessage">
+
+Something Went Wrong
+
+</p>
+
+<button id="closeError">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<script src="config.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
